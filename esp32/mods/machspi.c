@@ -84,7 +84,7 @@ typedef struct _mach_spi_obj_t {
 /******************************************************************************
  DEFINE CONSTANTS
  ******************************************************************************/
-#define MACH_SPI_FIRST_BIT_MSB                    0
+
 /******************************************************************************
  DECLARE PRIVATE DATA
  ******************************************************************************/
@@ -104,7 +104,7 @@ STATIC void pybspi_init (const mach_spi_obj_t *self) {
 
     // configure the SPI port
     spi_attr_t spi_attr = {.mode = SpiMode_Master, .subMode = self->submode, .speed = 80000000 / self->baudrate,
-                           .bitOrder = SpiBitOrder_MSBFirst, .halfMode = SpiWorkMode_Full};
+                           .bitOrder = self->bitorder, .halfMode = SpiWorkMode_Full};
     spi_init(self->spi_num, &spi_attr);
 }
 
@@ -261,11 +261,11 @@ STATIC mp_obj_t pyb_spi_init_helper(mach_spi_obj_t *self, const mp_arg_val_t *ar
         goto invalid_args;
     }
 
-    // TODO: Do someting with this value
-    // uint firstbit = args[5].u_int;
-    // if (firstbit != PYBSPI_FIRST_BIT_MSB) {
-    //     goto invalid_args;
-    // }
+    self->bitorder = args[5].u_int;
+    if ((self->bitorder != SpiBitOrder_MSBFirst) && 
+            (self->bitorder != SpiBitOrder_LSBFirst)){
+        goto invalid_args;
+    }
 
     // set the correct submode
     if (self->polarity == 0 && self->phase == 0) {
@@ -310,7 +310,7 @@ static const mp_arg_t pyb_spi_init_args[] = {
     { MP_QSTR_bits,         MP_ARG_KW_ONLY  | MP_ARG_INT,  {.u_int = 8} },
     { MP_QSTR_polarity,     MP_ARG_KW_ONLY  | MP_ARG_INT,  {.u_int = 0} },
     { MP_QSTR_phase,        MP_ARG_KW_ONLY  | MP_ARG_INT,  {.u_int = 0} },
-    { MP_QSTR_firstbit,     MP_ARG_KW_ONLY  | MP_ARG_INT,  {.u_int = 0} },  // FIXME
+    { MP_QSTR_firstbit,     MP_ARG_KW_ONLY  | MP_ARG_INT,  {.u_int = SpiBitOrder_MSBFirst} },  // FIXME
     { MP_QSTR_pins,         MP_ARG_KW_ONLY  | MP_ARG_OBJ,  {.u_obj = MP_OBJ_NULL} },
 };
 STATIC mp_obj_t pyb_spi_make_new(const mp_obj_type_t *type, mp_uint_t n_args, mp_uint_t n_kw, const mp_obj_t *all_args) {
@@ -464,7 +464,8 @@ STATIC const mp_map_elem_t pyb_spi_locals_dict_table[] = {
 
     // class constants
     { MP_OBJ_NEW_QSTR(MP_QSTR_MASTER),              MP_OBJ_NEW_SMALL_INT(SpiMode_Master) },
-    { MP_OBJ_NEW_QSTR(MP_QSTR_MSB),                 MP_OBJ_NEW_SMALL_INT(0) },  // FIXME
+    { MP_OBJ_NEW_QSTR(MP_QSTR_MSB),                 MP_OBJ_NEW_SMALL_INT(SpiBitOrder_MSBFirst) },  
+    { MP_OBJ_NEW_QSTR(MP_QSTR_LSB),                 MP_OBJ_NEW_SMALL_INT(SpiBitOrder_LSBFirst) },
 };
 
 STATIC MP_DEFINE_CONST_DICT(pyb_spi_locals_dict, pyb_spi_locals_dict_table);
