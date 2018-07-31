@@ -224,3 +224,13 @@ class Pybytes:
                 print("Error reading {} file!\n Exception: {}".format(file, ex))
         except Exception as ex:
             print("Cannot open {}: {}".format(file, ex))
+
+   def export_config(self, file='/flash/pybytes_config.json'):
+        try:
+            import json
+            f = open(file,'w')
+            f.write(json.dumps(self.__conf))
+            f.close()
+            print("Pybytes configuration exported to {}".format(file))
+        except Exception as e:
+            print("Exception: {}".format(e))

@@ -1,4 +1,4 @@
-print('Pybytes library: v0.9.0')
+print('Pybytes library: v0.9.1')
 
 '''
 This is the main.py file for Pybytes
