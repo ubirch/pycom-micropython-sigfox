@@ -384,6 +384,16 @@ STATIC mp_obj_t mod_pycom_bootmgr (size_t n_args, const mp_obj_t *pos_args, mp_m
 
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(mod_pycom_bootmgr_obj, 0, mod_pycom_bootmgr);
 
+STATIC mp_obj_t mod_pycom_lte_modem_on_boot (mp_uint_t n_args, const mp_obj_t *args) {
+    if (n_args) {
+        config_set_lte_modem_enable_on_boot (mp_obj_is_true(args[0]));
+    } else {
+        return mp_obj_new_bool(config_get_lte_modem_enable_on_boot());
+    }
+    return mp_const_none;
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mod_pycom_lte_modem_on_boot_obj, 0, 1, mod_pycom_lte_modem_on_boot);
+
 STATIC const mp_map_elem_t pycom_module_globals_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR___name__),                        MP_OBJ_NEW_QSTR(MP_QSTR_pycom) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_heartbeat),                       (mp_obj_t)&mod_pycom_heartbeat_obj },
@@ -405,6 +415,7 @@ STATIC const mp_map_elem_t pycom_module_globals_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_wifi_pwd),                        (mp_obj_t)&mod_pycom_wifi_pwd_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_heartbeat_on_boot),               (mp_obj_t)&mod_pycom_heartbeat_on_boot_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_bootmgr),                         (mp_obj_t)&mod_pycom_bootmgr_obj },
+    { MP_OBJ_NEW_QSTR(MP_QSTR_lte_modem_en_on_boot),            (mp_obj_t)&mod_pycom_lte_modem_on_boot_obj },
 
     // class constants
     { MP_OBJ_NEW_QSTR(MP_QSTR_FACTORY),                         MP_OBJ_NEW_SMALL_INT(0) },

@@ -56,6 +56,7 @@
 #endif
 #if defined (GPY) || defined (FIPY)
 #include "modlte.h"
+#include "lteppp.h"
 #endif
 
 #include "random.h"
@@ -278,6 +279,10 @@ soft_reset:
     if (!soft_reset) {
     #if defined(GPY) || defined (FIPY)
         modlte_init0();
+        if(config_get_lte_modem_enable_on_boot())
+        {
+            lteppp_connect_modem();
+        }
     #endif
     }
 

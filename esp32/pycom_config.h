@@ -47,10 +47,11 @@ typedef struct {
 } pycom_rgbled_config_t;
 
 typedef struct {
-    uint8_t hw_type;
+    uint8_t lte_modem_en_on_boot;
     uint8_t sw_version[12];
     uint8_t boot_fs_type;
     uint8_t boot_partition;
+    uint8_t hw_type;
     uint8_t pycom_reserved[488];
 } pycom_config_t;
 
@@ -128,5 +129,9 @@ bool config_set_boot_fs_type (const uint8_t boot_fs_type);
 uint8_t config_get_boot_partition (void);
 
 bool config_set_boot_partition (const uint8_t boot_partition);
+
+bool config_set_lte_modem_enable_on_boot (bool lte_modem_en_on_boot);
+
+bool config_get_lte_modem_enable_on_boot (void);
 
 #endif /* PYCOM_CONFIG_H_ */

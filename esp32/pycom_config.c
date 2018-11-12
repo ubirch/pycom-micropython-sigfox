@@ -183,6 +183,18 @@ bool config_set_boot_fs_type (const uint8_t boot_fs_type) {
     return config_write();
 }
 
+bool config_set_lte_modem_enable_on_boot (bool lte_modem_en_on_boot) {
+    if (pycom_config_block.pycom_config.lte_modem_en_on_boot != (uint8_t)lte_modem_en_on_boot) {
+        pycom_config_block.pycom_config.lte_modem_en_on_boot = (uint8_t)lte_modem_en_on_boot;
+        return config_write();
+    }
+    return true;
+}
+
+bool config_get_lte_modem_enable_on_boot (void) {
+    return (bool)pycom_config_block.pycom_config.lte_modem_en_on_boot;
+}
+
 static bool config_write (void) {
     // erase the block first
     if (ESP_OK == spi_flash_erase_sector(CONFIG_DATA_FLASH_BLOCK)) {
