@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Pycom Limited.
+ * Copyright (c) 2018, Pycom Limited.
  *
  * This software is licensed under the GNU GPL version 3 or any
  * later version, with permitted additional terms. For more information
@@ -78,6 +78,7 @@
 #include "freertos/queue.h"
 
 
+#include "lteppp.h"
 /******************************************************************************
  DECLARE EXTERNAL FUNCTIONS
  ******************************************************************************/
@@ -264,6 +265,10 @@ soft_reset:
     if (!soft_reset) {
     #if defined(GPY) || defined (FIPY)
         modlte_init0();
+        if(config_get_lte_modem_enable_on_boot())
+        {
+        	lteppp_connect_modem();
+        }
     #endif
     }
 

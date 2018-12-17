@@ -50,6 +50,7 @@ class MQTTClient:
 
     def check_msg(self):
         while 1:
+            time_before_retry = 10
             if self.__reconnecting == False:
                 try:
                     return self.__mqtt.check_msg()

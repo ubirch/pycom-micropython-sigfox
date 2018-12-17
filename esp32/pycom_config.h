@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Pycom Limited.
+ * Copyright (c) 2018, Pycom Limited.
  *
  * This software is licensed under the GNU GPL version 3 or any
  * later version, with permitted additional terms. For more information
@@ -68,12 +68,18 @@ typedef struct {
 } pycom_wdt_config_t;
 
 typedef struct {
+	uint8_t lte_modem_en_on_boot;
+}pycom_lte_config_t;
+
+typedef struct {
     pycom_lpwan_config_t lpwan_config;
     pycom_wifi_config_t wifi_config;
     pycom_rgbled_config_t rgbled_config;
     pycom_pybytes_config_t pybytes_config;
     pycom_wdt_config_t wdt_config;
     pycom_config_t pycom_config;
+    pycom_lte_config_t lte_config;
+    uint8_t pycom_dummy[247];
 } pycom_config_block_t;
 
 /******************************************************************************
@@ -143,4 +149,7 @@ bool config_set_pybytes_force_update (uint8_t force_update);
 
 bool config_get_pybytes_force_update (void);
 
+bool config_set_lte_modem_enable_on_boot (bool lte_modem_en_on_boot);
+
+bool config_get_lte_modem_enable_on_boot (void);
 #endif /* PYCOM_CONFIG_H_ */

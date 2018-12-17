@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Pycom Limited.
+ * Copyright (c) 2018, Pycom Limited.
  *
  * This software is licensed under the GNU GPL version 3 or any
  * later version, with permitted additional terms. For more information
@@ -63,6 +63,7 @@ TaskHandle_t xSigfoxTaskHndl;
 #endif
 #if defined(GPY) || defined (FIPY)
 TaskHandle_t xLTETaskHndl;
+TaskHandle_t xLTEUpgradeTaskHndl;
 #endif
 
 extern void machine_init0(void);
