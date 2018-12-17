@@ -16,6 +16,6 @@
 
 #define SIGFOX_VERSION_NUMBER                          "1.0.1"
 
-#define PYBYTES_VERSION_NUMBER                         "0.9.1"
+#define PYBYTES_VERSION_NUMBER                         "0.9.2"
 
 #endif /* VERSION_H_ */
