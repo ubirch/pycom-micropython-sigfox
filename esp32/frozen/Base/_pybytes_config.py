@@ -89,9 +89,9 @@ class PybytesConfig:
                     elif extra_preference == "ca_certs":
                         index = extra_preferences.index(extra_preference)
                         if len(extra_preferences[index + 1]) > 0:
-                            ssl_params = { "ca_certs": extra_preferences[index + 1] }
+                            ssl_params = { "ssl_params": {"ca_certs": extra_preferences[index + 1] }}
                         else:
-                            ssl_params = { "ca_certs": '/flash/cert/pycom-ca.pem' }
+                            ssl_params = { "ssl_params": {"ca_certs": '/flash/cert/pycom-ca.pem' }}
                     elif extra_preference == "dump_ca":
                         dump_ca = True
                     elif extra_preference == "sigfox":
@@ -147,7 +147,6 @@ class PybytesConfig:
                     'pybytes_autostart': pybytes_autostart,
                     'wlan_antenna': wlan_antenna,
                     'ssl': ssl,
-                    'ssl_params': ssl_params,
                     'dump_ca': dump_ca
                 }
                 if lora_config is not None:
