@@ -276,24 +276,24 @@ class PybytesConnection:
             print("This device does not support Sigfox connections")
             return
         sigfox_config = self.__conf.get('sigfox')
-        if sigfox_config is not None and sigfox_config.get('RCZ') is not None:
-            try:
-                sf_rcz = int(sigfox_config.get('RCZ',0)) - 1
-                if sf_rcz >= 1 and sf_rcz <= 4:
-                    sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=sf_rcz)
-                    self.__sigfox_socket = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
-                    self.__sigfox_socket.setblocking(True)
-                    self.__sigfox_socket.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
-                    self.__pybytes_library.set_network_type(constants.__NETWORK_TYPE_SIGFOX)
-                    self.__network_type = constants.__NETWORK_TYPE_SIGFOX
-                    self.__connection_status = constants.__CONNECTION_STATUS_CONNECTED_SIGFOX
-                    print("Connected using Sigfox. Only upload stream is supported")
-                else:
-                    print('Invalid Sigfox RCZ specified in config!')
-            except Exception as e:
-                print('Exception in connect_sigfox: {}'.format(e))
-        else:
-            print('Invalid Sigfox RCZ specified in config!')
+        if sigfox_config is None or sigfox_config.get('RCZ') is None:
+            print('''Your sigfox radio configuration (RC) is currently using the default (1)
+                     You can set your RC with command (ex: RC 3): pybytes.set_config('sigfox', {'RCZ': 3})
+                     See all available zone options for RC at https://support.sigfox.com/docs/radio-configuration''')
+        try:
+            sf_rcz = int(sigfox_config.get('RCZ', 1)) - 1
+            if sf_rcz >= 0 and sf_rcz <= 3:
+                sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=sf_rcz)
+                self.__sigfox_socket = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
+                self.__sigfox_socket.setblocking(True)
+                self.__sigfox_socket.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
+                self.__network_type = constants.__NETWORK_TYPE_SIGFOX
+                self.__connection_status = constants.__CONNECTION_STATUS_CONNECTED_SIGFOX
+                print("Connected using Sigfox. Only upload stream is supported")
+            else:
+                print('Invalid Sigfox RCZ specified in config!')
+        except Exception as e:
+            print('Exception in connect_sigfox: {}'.format(e))
 
     # COMMON
     def disconnect(self):

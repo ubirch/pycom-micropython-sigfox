@@ -10,12 +10,12 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-#define SW_VERSION_NUMBER                              "1.18.1.r9"
+#define SW_VERSION_NUMBER                              "1.18.1.r10"
 
 #define LORAWAN_VERSION_NUMBER                         "1.0.2"
 
 #define SIGFOX_VERSION_NUMBER                          "1.0.1"
 
-#define PYBYTES_VERSION_NUMBER                         "0.9.4"
+#define PYBYTES_VERSION_NUMBER                         "0.9.5"
 
 #endif /* VERSION_H_ */
