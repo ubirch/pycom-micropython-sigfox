@@ -72,7 +72,7 @@ class Pybytes:
         return self.__pybytes_connection.connect_lora_otta(timeout, nanogateway)
 
     def connect_sigfox(self):
-        self.__pybytes_connection.connect_sigfox()
+        return self.__pybytes_connection.connect_sigfox()
 
     def disconnect(self):
         self.__pybytes_connection.disconnect()

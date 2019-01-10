@@ -44,6 +44,7 @@ class PybytesLibrary:
         return self.__pack_message(True, False, constants.__TYPE_BATTERY_INFO, body)
 
     def pack_info_message(self):
+        print_debug(5, "This is pack_info_message()")
         body = bytearray()
         sysname = os.uname().sysname
 

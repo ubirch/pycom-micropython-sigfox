@@ -57,3 +57,7 @@ class constants:
     __PERSISTENT_MASK = 0x40
     __NETWORK_TYPE_MASK = 0x30
     __TYPE_MASK = 0xF
+
+    __SIGFOX_WARNING = """WARNING! Your sigfox radio configuration (RC) is currently using the default (1)
+You can set your RC with command (ex: RC 3): pybytes.set_config('sigfox', {'RCZ': 3})
+See all available zone options for RC at https://support.sigfox.com/docs/radio-configuration """

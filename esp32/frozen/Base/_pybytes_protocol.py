@@ -69,10 +69,9 @@ class PybytesProtocol:
         self.__mqtt_check_interval = check_interval
         self.__start_recv_mqtt()
 
-    def start_Sigfox(self, pybytes_connection, check_interval):
-        print_debug(5, "This is PybytesProtocol.start_Sigfox(check_interval={})".format(check_interval))
+    def start_Sigfox(self, pybytes_connection):
+        print_debug(5, "This is PybytesProtocol.start_Sigfox()")
         self.__pybytes_library.set_network_type(constants.__NETWORK_TYPE_SIGFOX)
-        self.__mqtt_check_interval = check_interval
         self.__pybytes_connection = pybytes_connection
 
     def __start_recv_mqtt(self):
