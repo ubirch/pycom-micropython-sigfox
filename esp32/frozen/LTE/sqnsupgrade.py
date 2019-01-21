@@ -375,7 +375,7 @@ class sqnsupgrade:
             else:
                 if debug: print('Loading {}'.format(file_path))
                 blobsize = os.stat(file_path)[6]
-                if blobsize < 10240:
+                if blobsize < 128:
                     print('Firmware file is too small!')
                     reconnect_uart()
                     sys.exit(1)
