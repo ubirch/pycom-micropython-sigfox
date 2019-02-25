@@ -28,6 +28,7 @@ from machine import ADC
 from machine import PWM
 from machine import Timer
 from machine import reset
+from machine import WDT
 
 import os
 import sys
@@ -37,15 +38,15 @@ import socket
 import struct
 
 class PybytesProtocol:
-    def __init__(self, config, message_callback):
+    def __init__(self, config, message_callback, pybytes_connection):
         self.__conf = config
         self.__thread_stack_size = 8192
         self.__device_id = config['device_id']
         self.__mqtt_download_topic = "d" + self.__device_id
         self.__mqtt_upload_topic = "u" + self.__device_id
         self.__mqtt_check_interval = 0.5
-        self.__pybytes_library = PybytesLibrary()
-        self.__pybytes_connection = None
+        self.__pybytes_connection = pybytes_connection
+        self.__pybytes_library = PybytesLibrary(pybytes_connection=pybytes_connection, pybytes_protocol=self)
         self.__user_message_callback = message_callback
         self.__pins = {}
         self.__pin_modes = {}
@@ -83,12 +84,14 @@ class PybytesProtocol:
 
         _thread.stack_size(self.__thread_stack_size)
         _thread.start_new_thread(self.__check_mqtt_message, ())
-        self.__connectionAlarm = Timer.Alarm(self.__keep_connection, 60 * 10, periodic=True)
+        self.__connectionAlarm = Timer.Alarm(self.__keep_connection, constants.__KEEP_ALIVE_PING_INTERVAL, periodic=True)
+
+    def __wifi_or_lte_connection(self):
+        return self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_WIFI or self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_LTE
 
     def __check_mqtt_message(self):
         print_debug(5, "This is PybytesProtocol.__check_mqtt_message()")
-        while(self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_WIFI
-              or self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_LTE):
+        while self.__wifi_or_lte_connection():
             try:
                 self.__pybytes_connection.__connection.check_msg()
                 time.sleep(self.__mqtt_check_interval)
@@ -99,8 +102,7 @@ class PybytesProtocol:
 
     def __keep_connection(self, alarm):
         print_debug(5, "This is PybytesProtocol.__keep_connection(alarm={})".format(alarm))
-        if (self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_WIFI
-            or self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_LTE):
+        if self.__wifi_or_lte_connection():
             self.send_ping_message()
 
     def __check_lora_messages(self):
@@ -131,6 +133,10 @@ class PybytesProtocol:
         if self.__user_message_callback is not None:
             if (message_type == constants.__TYPE_PING):
                 self.send_ping_message()
+
+            elif message_type == constants.__TYPE_PONG:
+                print_debug(1,'message type pong received, feeding watchdog...')
+                self.__pybytes_connection.__wifi_lte_watchdog.feed()
 
             elif (message_type == constants.__TYPE_INFO):
                 self.send_info_message()
@@ -332,8 +338,7 @@ class PybytesProtocol:
             finalTopic = self.__mqtt_upload_topic if topic is None else self.__mqtt_upload_topic + "/" + topic
 
             print_debug(2, "Sending message:[{}] with topic:[{}] and finalTopic: [{}]".format(message, topic, finalTopic))
-            if (self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_WIFI
-                or self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_MQTT_LTE):
+            if self.__wifi_or_lte_connection():
                 self.__pybytes_connection.__connection.publish(finalTopic, message)
             elif (self.__pybytes_connection.__connection_status == constants.__CONNECTION_STATUS_CONNECTED_LORA):
                 with self.__pybytes_connection.lora_lock:
