@@ -36,6 +36,7 @@ import _thread
 import time
 import socket
 import struct
+import machine
 
 class PybytesProtocol:
     def __init__(self, config, message_callback, pybytes_connection):
