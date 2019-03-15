@@ -70,6 +70,15 @@ APP_INC += -I../lib
 APP_INC += -I../drivers/sx127x
 APP_INC += -I../stmhal
 
+NACL_PATH = $(ESP_IDF_COMP_PATH)/../../example-esp32/components/ubirch-mbed-nacl-cm0/source
+APP_INC += -I$(NACL_PATH)/nacl
+APP_INC += -I$(NACL_PATH)/nacl/crypto_sign
+APP_INC += -I$(NACL_PATH)/nacl/crypto_hash
+APP_INC += -I$(NACL_PATH)/nacl/crypto_hashblocks
+APP_INC += -I$(NACL_PATH)/nacl/include
+APP_INC += -I$(NACL_PATH)/nacl/shared
+APP_INC += -I$(NACL_PATH)/randombytes
+
 APP_MAIN_SRC_C = \
 	main.c \
 	mptask.c \
@@ -127,6 +136,7 @@ APP_MODS_SRC_C = $(addprefix mods/,\
 	moduqueue.c \
 	moduhashlib.c \
 	moducrypto.c \
+	modued25519.c \
 	machtimer.c \
 	machtimer_alarm.c \
 	machtimer_chrono.c \
