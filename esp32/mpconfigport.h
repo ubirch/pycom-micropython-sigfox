@@ -170,6 +170,7 @@ extern const struct _mp_obj_module_t utime_module;
 extern const struct _mp_obj_module_t pycom_module;
 extern const struct _mp_obj_module_t mp_module_uhashlib;
 extern const struct _mp_obj_module_t module_ucrypto;
+extern const struct _mp_obj_module_t mp_module_ued25519;
 extern const struct _mp_obj_module_t mp_module_ussl;
 extern const struct _mp_obj_module_t mp_module_uqueue;
 
@@ -200,6 +201,7 @@ extern const struct _mp_obj_module_t mp_module_uqueue;
     { MP_OBJ_NEW_QSTR(MP_QSTR_time),            (mp_obj_t)&utime_module },        \
     { MP_OBJ_NEW_QSTR(MP_QSTR_hashlib),         (mp_obj_t)&mp_module_uhashlib },  \
     { MP_OBJ_NEW_QSTR(MP_QSTR_crypto),          (mp_obj_t)&module_ucrypto },      \
+    { MP_OBJ_NEW_QSTR(MP_QSTR_ed25519),         (mp_obj_t)&mp_module_ued25519 },     \
     { MP_OBJ_NEW_QSTR(MP_QSTR_ssl),             (mp_obj_t)&mp_module_ussl },      \
     { MP_OBJ_NEW_QSTR(MP_QSTR_errno),           (mp_obj_t)&mp_module_uerrno },    \
     { MP_OBJ_NEW_QSTR(MP_QSTR_queue),           (mp_obj_t)&mp_module_uqueue },    \
