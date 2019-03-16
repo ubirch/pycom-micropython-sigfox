@@ -22,12 +22,12 @@
 
 typedef struct _mp_obj_sk_t {
     mp_obj_base_t base;
-    unsigned char *key[crypto_sign_SECRETKEYBYTES];
+    unsigned char key[crypto_sign_SECRETKEYBYTES];
 } mp_obj_sk_t;
 
 typedef struct _mp_obj_vk_t {
     mp_obj_base_t base;
-    unsigned char *key[crypto_sign_PUBLICKEYBYTES];
+    unsigned char key[crypto_sign_PUBLICKEYBYTES];
 } mp_obj_vk_t;
 
 
@@ -120,7 +120,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_3(vk_verify_obj, vk_verify);
 
 STATIC mp_obj_t vk_to_bytes(mp_obj_t self_in) {
     mp_obj_vk_t *vk = self_in;
-    return mp_obj_new_str_of_type(&mp_type_str, (const byte *) vk->key, crypto_sign_PUBLICKEYBYTES);
+    return mp_obj_new_bytes((const byte *) vk->key, crypto_sign_PUBLICKEYBYTES);
 }
 
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(vk_to_bytes_obj, vk_to_bytes);
@@ -174,7 +174,7 @@ STATIC mp_obj_t sk_get_verifying_key(mp_obj_t self_in) {
 
     vk = m_new_obj(mp_obj_vk_t);
     vk->base.type = &verifying_key_type;
-    memcpy(vk->key, sk->key + 32, crypto_sign_PUBLICKEYBYTES);
+    memcpy(vk->key, &(sk->key[32]), crypto_sign_PUBLICKEYBYTES);
 
     return vk;
 }
@@ -183,7 +183,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_1(sk_get_verifying_key_obj, sk_get_verifying_key)
 
 STATIC mp_obj_t sk_to_bytes(mp_obj_t self_in) {
     mp_obj_sk_t *sk = self_in;
-    return mp_obj_new_str_of_type(&mp_type_str, (const byte *) sk->key, crypto_sign_SECRETKEYBYTES);
+    return mp_obj_new_bytes((const byte *) sk->key, crypto_sign_SECRETKEYBYTES);
 }
 
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(sk_to_bytes_obj, sk_to_bytes);
