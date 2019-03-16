@@ -57,7 +57,7 @@ STATIC mp_obj_t key_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_
             self = m_new_obj(mp_obj_vk_t);
             memset(self, 0, sizeof(mp_obj_vk_t));
             if (bufinfo.len != crypto_sign_PUBLICKEYBYTES) {
-                mp_raise_ValueError("ed25519: signing key must be 32 bytes");
+                mp_raise_ValueError("ed25519: verifying key must be 32 bytes");
             }
 
             ((mp_obj_vk_t *) self)->base.type = type;
@@ -103,7 +103,7 @@ STATIC mp_obj_t vk_verify(mp_obj_t self_in, mp_obj_t signature, mp_obj_t data) {
 
     // verify signature
     int ret = crypto_sign_open(m, &mlen, sm, smlen, (const unsigned char *) self->key);
-    printf("ed25519: verify: %d\r\n", ret);
+    //printf("ed25519: verify: %d\r\n", ret);
 
     free(m);
     // cppcheck-suppress doubleFree
@@ -150,7 +150,7 @@ STATIC mp_obj_t sk_sign(mp_obj_t self_in, mp_obj_t data) {
     mp_obj_t signature;
 
     mp_get_buffer_raise(data, &bufinfo, MP_BUFFER_READ);
-    printf("ed25519: signing %d bytes\n", bufinfo.len);
+    //printf("ed25519: signing %d bytes\n", bufinfo.len);
 
     unsigned char *sm = (unsigned char *) malloc(crypto_sign_BYTES + bufinfo.len);
     if (!sm) {
