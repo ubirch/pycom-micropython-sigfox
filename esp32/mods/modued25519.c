@@ -30,6 +30,13 @@ typedef struct _mp_obj_vk_t {
     unsigned char key[crypto_sign_PUBLICKEYBYTES];
 } mp_obj_vk_t;
 
+void randombytes(unsigned char *x, unsigned long long xlen) {
+    while (xlen > 0) {
+        *x = (unsigned char) esp_random();
+        x++;
+        xlen--;
+    }
+}
 
 /// \classmethod \constructor([key])
 /// the key bytes must be passed
